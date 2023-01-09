@@ -4,6 +4,12 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StoreProject.BusinessLayer.Abstract;
+using StoreProject.BusinessLayer.Concrete;
+using StoreProject.DataAccessLayer.Abstract;
+using StoreProject.DataAccessLayer.Concrete;
+using StoreProject.DataAccessLayer.EntityFramework;
+using StoreProject.EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +29,13 @@ namespace StoreProject.PrensetationLayer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<Context>();
+
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Context>();
+
+            services.AddScoped<ICategoryService, CategoryManager>();
+            services.AddScoped<ICategoryDal, EfCategoryDal>();
+
             services.AddControllersWithViews();
         }
 
